@@ -1,0 +1,104 @@
+# Default values for springboot-demoweb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: yusufazaz/helloworld
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v1.0.0"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+rbac:
+  create: true
+  
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  
+spring:
+  ## Uncomment if you want to activate a specfic spring profile
+  # profile: kubernetes
+  ## Ensures that Spring trusts Kubernetes certificate for use with
+  ## service discovery, configuration, etc.
+  trustKubernetesCertificates: true
+  ## customized parameters/config for your spring app.
+  ## by default will be rendered to `/config/application.yml`
+  config:
+    ## Currently only supports file
+    type: file
+    ## Contents of config in YAML
+    # content: |-
+    #   spring:
+    #     database:
+    ## An optional secret that contains a base64 encoded YAML file to be loaded in
+    ## for passwords and other secrets, by default `/config/secret.yml`
+    ## this secret must only have a single key of `secret.yml: |-`.
+    # secretName: configSecret
+    
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # runAsUser: 1000
+
+
+containerPort: 8090
+
+livenessProbe: 
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+readinessProbe: 
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+service:
+  enabled: true
+  type: ClusterIP
+  httpPort: 80
+
+ingress:
+  enabled: false
+ 
+resources: 
+   limits:
+     cpu: 1000m
+     memory: 4096Mi
+   requests:
+     cpu: 100m
+     memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
