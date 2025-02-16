@@ -45,7 +45,14 @@ spring:
     ## for passwords and other secrets, by default `/config/secret.yml`
     ## this secret must only have a single key of `secret.yml: |-`.
     # secretName: configSecret
-    
+extraEnv:
+  spring.oidc.mongodb.uri: mongo-uri
+
+secretKeyRefName: mongodb-secret
+extraEnvSecrets:
+  spring.oidc.clientId: clientId
+  spring.oidc.clientSecret: clientSecret
+  
 podAnnotations: {}
 
 podSecurityContext: {}
