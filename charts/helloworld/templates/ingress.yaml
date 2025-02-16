@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "smc.fullname" . }}
+{{- $fullName := include "helloworld.fullname" . }}
 {{- $httpPort := .Values.service.httpPort }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -15,11 +15,11 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    app: {{ template "smc.name" . }}
+    app: {{ template "helloworld.name" . }}
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-  name: alb-ingress-{{ template "smc.fullname" . }}
+  name: alb-ingress-{{ template "helloworld.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
 spec:
   ingressClassName: alb
